@@ -1,17 +1,17 @@
-# HD44780 LCD 4-Bit Library (AVR)
+# HD44780 LCD 4-Bit Library for AVR
 
-A small C library for controlling **HD44780 compatible character LCD displays** in **4-bit mode** using AVR microcontrollers (made for the PICado Mega).
+A **lightweight C library** for controlling **HD44780-compatible character LCD displays** in **4-bit mode** using AVR microcontrollers. This library was designed for the **PICado Mega** but works with most AVR MCUs.
 
-The goal of this library is to provide a **simple and compact driver** that can easily be used in small embedded projects.
+The library aims for:
 
-This implementation focuses on:
+* Small code size
+* Clear and simple structure
+* Easy integration into embedded projects
+* Consistent naming: variables use `thisCase`, functions use `ThisCase`
 
-* small code size
-* simple and readable structure
-* clear naming conventions
-* compatibility with common AVR microcontrollers
+---
 
-The source files in this repository are:
+## Repository Contents
 
 ```
 HD44780.c
@@ -20,141 +20,128 @@ HD44780.h
 
 ---
 
-# Origin
+## Origin
 
-This library is **derived from the project below**:
+This library is **derived from the work of Nawi**:
 
-https://github.com/nawicool/LCD-4BIT-Display/tree/master
+[Original project](https://github.com/nawicool/LCD-4BIT-Display/tree/master)
 
-The original work was written by **Nawi** and released under the **GNU General Public License (GPL v2 or later)**.
-
-This version modifies the original implementation to simplify the structure and reduce code size while keeping the same basic functionality.
+It simplifies the original library while preserving essential functionality, making it easier to use in small projects.
 
 ---
 
-# Changes From The Original
+## Key Changes from Original
 
-Compared to the original library, the following changes were made:
-
-* reduced overall code size
-* simplified command handling
-* removed several redundant wrapper functions
-* simplified internal LCD write functions
-* simplified CGRAM handling
-* simplified string printing
-* updated naming conventions
-
-Naming conventions used in this version:
-
-* variables use `thisCase`
-* functions use `ThisCase`
-
-These changes were made to improve readability and make the library easier to integrate into embedded projects.
+* Reduced code size and complexity
+* Simplified internal LCD write functions
+* Consolidated string printing and command handling
+* Easier-to-read naming conventions
+* Updated CGRAM/custom character handling
 
 ---
 
-# Features
+## Features
 
-* HD44780 compatible LCD support
+* HD44780-compatible LCD support
 * 4-bit communication mode
-* cursor positioning
-* printing characters and strings
-* printing integers
-* printing floating point numbers
-* custom character support (CGRAM)
+* Cursor positioning and movement
+* Print characters and strings
+* Support for integers and floats (optional)
+* Custom character creation in CGRAM
+* Handles special characters like `\n`, `\r`, `\t`, `\b`, `\f`, and `\v`
 
 ---
 
-# Hardware Connections (Example)
+## Hardware Connections Example
 
-Example pin mapping used in the library:
+| LCD Pin | AVR Port |
+| ------- | -------- |
+| RS      | PL0      |
+| RW      | PL1      |
+| EN      | PL2      |
+| BL      | PL3      |
+| D4      | PL4      |
+| D5      | PL5      |
+| D6      | PL6      |
+| D7      | PL7      |
 
-| LCD | AVR Port |
-| --- | -------- |
-| RS  | PL0      |
-| RW  | PL1      |
-| EN  | PL2      |
-| BL  | PL3      |
-| D4  | PL4      |
-| D5  | PL5      |
-| D6  | PL6      |
-| D7  | PL7      |
-
-
-These pins can be changed in **HD44780.h**.
+> Pins can be redefined in `HD44780.h` if needed.
 
 ---
 
-# Basic Usage
-
-Example program:
+## Basic Usage
 
 ```c
 #include <avr/io.h>
 #include "HD44780.h"
 
-int main(void){
-
+int main(void) {
     InitPins();
     InitDisplay();
 
     PrintStringAt("Hello", 1, 0);
     PrintStringAt("World", 2, 0);
 
-    while(1){
-    }
+    while(1) { }
 }
 ```
 
 ---
 
-# Creating Custom Characters
+## Handling Special Characters
 
-HD44780 displays allow **up to 8 custom characters** stored in CGRAM.
+This library handles commonly used delimiters automatically when printing strings:
+
+* `\n` → Move to the start of the next row
+* `\r` → Move to the start of the current row
+* `\t` → Inserts 4 spaces (tab)
+* `\b` → Backspace (erase previous character)
+* `\f` → Clears display
+* `\v` → Moves to the next row, same column
 
 Example:
 
 ```c
-uint8_t smiley[8] = {
-0x00,
-0x0A,
-0x00,
-0x00,
-0x11,
-0x0E,
-0x00,
-0x00
-};
-
-CreateCustomChar(smiley, 0);
-ShowCustomChar(0, 1, 5);
+PrintStringAt("Hello\tWorld!\nNew Line", 1, 0);
 ```
 
 ---
 
-# Supported Displays
+## Creating Custom Characters
 
-The library works with most **HD44780 compatible character LCD modules**, including:
+HD44780 LCDs support **8 custom characters** in CGRAM:
+
+```c
+uint8_t smiley[8] = {
+    0x00, 0x0A, 0x00, 0x00, 0x11, 0x0E, 0x00, 0x00
+};
+
+CreateCustomChar(smiley, 0);
+ShowCustomChar(0, 1, 5); // Display custom char at row 1, column 5
+```
+
+---
+
+## Supported Displays
+
+Works with most HD44780-based LCDs, including:
 
 * 16x2 LCD
 * 20x4 LCD
-* other HD44780 based displays
+* Other standard character LCDs compatible with HD44780
 
 ---
 
-# Requirements
+## Requirements
 
 * AVR microcontroller
-* avr-gcc
-* `<avr/io.h>`
-* `<util/delay.h>`
+* avr-gcc toolchain
+* `<avr/io.h>` and `<util/delay.h>`
 
 ---
 
-# License
+## License
 
-This project remains licensed under the **GNU General Public License v2 or later**, in accordance with the original project.
+This library is licensed under the **GNU General Public License v2 or later**, consistent with the original project by Nawi.
 
-Original project repository:
-
-https://github.com/nawicool/LCD-4BIT-Display/tree/master
+[Original repository](https://github.com/nawicool/LCD-4BIT-Display/tree/master)
