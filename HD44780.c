@@ -27,6 +27,66 @@ static void SendByte(uint8_t value){
     SendNibble(value & 0x0F); // low nibble
 }
 
+static void thisItoa(int value, char *buffer, uint8_t base)
+{
+	char temp[12];
+	int i = 0, j = 0;
+	int isNegative = 0;
+
+	if(value == 0)
+	{
+		buffer[0] = '0';
+		buffer[1] = '\0';
+		return;
+	}
+
+	if(value < 0 && base == 10)
+	{
+		isNegative = 1;
+		value = -value;
+	}
+
+	while(value != 0)
+	{
+		int rem = value % base;
+		temp[i++] = (rem > 9) ? (rem - 10) + 'A' : rem + '0';
+		value /= base;
+	}
+
+	if(isNegative)
+	temp[i++] = '-';
+
+	/* Reverse string */
+	for(j = 0; j < i; j++)
+	buffer[j] = temp[i - j - 1];
+
+	buffer[i] = '\0';
+}
+
+static void FloatToStr(float value, char *buffer, uint8_t precision)
+{
+	int intPart = (int)value;
+	float frac = value - intPart;
+	if(frac < 0) frac = -frac;
+
+	char temp[12];
+	thisItoa(intPart, temp, 10);
+	char *p = buffer;
+	while(*temp) *p++ = *temp++;
+
+	*p++ = '.';
+
+	for(uint8_t i=0; i<precision; i++)
+	{
+		frac *= 10;
+		int digit = (int)frac;
+		*p++ = digit + '0';
+		frac -= digit;
+	}
+
+	*p = '\0';
+}
+
 void InitPins(void){
     LCD_DDR |= (1<<LCD_RS) |
                (1<<LCD_RW) |
@@ -114,7 +174,7 @@ void PrintIntAt(int value, uint8_t row, uint8_t col){
 
     char buffer[12];
 
-    itoa(value, buffer, 10);
+    thisItoa(value, buffer, 10);
 
     PrintStringAt(buffer, row, col);
 }
@@ -123,7 +183,7 @@ void PrintDoubleAt(double value, uint8_t row, uint8_t col){
 
     char buffer[16];
 
-    dtostrf(value, 6, 3, buffer);
+    FloatToStr(value, 6, 3, buffer);
 
     PrintStringAt(buffer, row, col);
 }
