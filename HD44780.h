@@ -4,7 +4,6 @@
 #include <stdint.h>
 
 /* LCD PORT CONFIGURATION */
-
 #define LCD_PORT PORTL
 #define LCD_DDR  DDRL
 
@@ -37,10 +36,13 @@ void GoToPosition(uint8_t row, uint8_t col);
 void PrintChar(uint8_t character);
 void PrintString(char *string);
 void PrintStringAt(char *string, uint8_t row, uint8_t col);
-void PrintIntAt(int value, uint8_t row, uint8_t col);
-void PrintDoubleAt(double value, uint8_t row, uint8_t col);
 
-/* CUSTOM CHAR */
+/* DISPLAY OPERATIONS */
+void ClearDisplay(void);
+void ShiftLeft(void);
+void ShiftRight(void);
+
+/* CUSTOM CHARACTERS */
 void CreateCustomChar(uint8_t *data, uint8_t position);
 void ShowCustomChar(uint8_t position, uint8_t row, uint8_t col);
 
