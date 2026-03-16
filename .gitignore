@@ -1,0 +1,70 @@
+# VS Code
+
+.vscode/
+*.code-workspace
+
+# Build folders
+
+build/
+bin/
+out/
+dist/
+
+# Object files
+
+*.o
+*.obj
+
+# Executables
+
+*.elf
+*.axf
+*.out
+*.exe
+
+# Static / dynamic libraries
+
+*.a
+*.lib
+*.so
+*.dylib
+
+# Dependency files
+
+*.d
+*.su
+
+# Debug files
+
+*.map
+*.log
+
+# Temporary files
+
+*.tmp
+*.temp
+*.swp
+*~
+
+# AVR specific build outputs
+
+*.hex
+*.eep
+*.lss
+*.lst
+*.srec
+
+# CMake (if used)
+
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# macOS
+
+.DS_Store
+
+# Windows
+
+Thumbs.db
