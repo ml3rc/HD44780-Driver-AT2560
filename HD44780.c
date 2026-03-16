@@ -1,7 +1,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <stdlib.h>
-#include "LCD_4_BIT_Display.h"
+#include "HD44780.h"
 
 static void PulseEnable(){
     LCD_PORT |= (1 << LCD_EN);
