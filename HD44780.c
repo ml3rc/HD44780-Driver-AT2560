@@ -4,32 +4,41 @@
 #include "LCD_4_BIT_Display.h"
 
 static void PulseEnable(){
-    PORT_CONTROL |= (1 << ENABLE);
+    LCD_PORT |= (1 << LCD_EN);
     _delay_us(1);
-    PORT_CONTROL &= ~(1 << ENABLE);
-    _delay_us(100);
+
+    LCD_PORT &= ~(1 << LCD_EN);
+    _delay_us(50);
 }
 
 static void SendNibble(uint8_t nibble){
-    PORT_LCD = (PORT_LCD & 0xF0) | (nibble & 0x0F);
+
+    /* clear data pins PL4–PL7 */
+    LCD_PORT &= 0x0F;
+
+    /* place nibble on PL4–PL7 */
+    LCD_PORT |= (nibble << 4);
+
     PulseEnable();
 }
 
 static void SendByte(uint8_t value){
-    SendNibble(value >> 4);
-    SendNibble(value);
+    SendNibble(value >> 4);   // high nibble
+    SendNibble(value & 0x0F); // low nibble
 }
 
 void InitPins(void){
-    DDR_LCD = 0x0F;
+    LCD_DDR |= (1<<LCD_RS) |
+               (1<<LCD_RW) |
+               (1<<LCD_EN) |
+               (1<<LCD_BL) |
+               (1<<LCD_D4) |
+               (1<<LCD_D5) |
+               (1<<LCD_D6) |
+               (1<<LCD_D7);
 
-    DDR_CONTROL |= (1<<REGISTER_SELECT) |
-                   (1<<READ_WRITE) |
-                   (1<<ENABLE);
-
-    PORT_CONTROL &= ~((1<<REGISTER_SELECT) |
-                      (1<<READ_WRITE) |
-                      (1<<ENABLE));
+    /* enable backlight */
+    LCD_PORT |= (1<<LCD_BL);
 }
 
 void InitDisplay(void){
@@ -56,15 +65,17 @@ void InitDisplay(void){
 }
 
 void WriteCommand(uint8_t value){
-    PORT_CONTROL &= ~(1 << REGISTER_SELECT);
-    PORT_CONTROL &= ~(1 << READ_WRITE);
+
+    LCD_PORT &= ~(1 << LCD_RS);
+    LCD_PORT &= ~(1 << LCD_RW);
 
     SendByte(value);
 }
 
 void WriteData(uint8_t value){
-    PORT_CONTROL |= (1 << REGISTER_SELECT);
-    PORT_CONTROL &= ~(1 << READ_WRITE);
+
+    LCD_PORT |= (1 << LCD_RS);
+    LCD_PORT &= ~(1 << LCD_RW);
 
     SendByte(value);
 }

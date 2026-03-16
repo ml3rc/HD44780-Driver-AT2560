@@ -1,6 +1,6 @@
 # HD44780 LCD 4-Bit Library (AVR)
 
-A small C library for controlling **HD44780 compatible character LCD displays** in **4-bit mode** using AVR microcontrollers.
+A small C library for controlling **HD44780 compatible character LCD displays** in **4-bit mode** using AVR microcontrollers (made for the PICado Mega).
 
 The goal of this library is to provide a **simple and compact driver** that can easily be used in small embedded projects.
 
@@ -69,15 +69,17 @@ These changes were made to improve readability and make the library easier to in
 
 Example pin mapping used in the library:
 
-| LCD Pin | AVR Pin |
-| ------- | ------- |
-| D4      | PC0     |
-| D5      | PC1     |
-| D6      | PC2     |
-| D7      | PC3     |
-| RS      | PL0     |
-| RW      | PL1     |
-| EN      | PL2     |
+| LCD | AVR Port |
+| --- | -------- |
+| RS  | PL0      |
+| RW  | PL1      |
+| EN  | PL2      |
+| BL  | PL3      |
+| D4  | PL4      |
+| D5  | PL5      |
+| D6  | PL6      |
+| D7  | PL7      |
+
 
 These pins can be changed in **HD44780.h**.
 

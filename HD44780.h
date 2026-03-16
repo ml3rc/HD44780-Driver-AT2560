@@ -3,18 +3,24 @@
 
 #include <stdint.h>
 
-/* LCD DATA PORT */
-#define DDR_LCD DDRC
-#define PORT_LCD PORTC
+/* LCD PORT CONFIGURATION */
 
-/* CONTROL PORT */
-#define DDR_CONTROL DDRL
-#define PORT_CONTROL PORTL
+#define LCD_PORT PORTL
+#define LCD_DDR  DDRL
 
 /* CONTROL PINS */
-#define REGISTER_SELECT 0
-#define READ_WRITE 1
-#define ENABLE 2
+#define LCD_RS 0   /* PL0 */
+#define LCD_RW 1   /* PL1 */
+#define LCD_EN 2   /* PL2 */
+
+/* BACKLIGHT */
+#define LCD_BL 3   /* PL3 */
+
+/* DATA PINS (4-bit mode) */
+#define LCD_D4 4   /* PL4 */
+#define LCD_D5 5   /* PL5 */
+#define LCD_D6 6   /* PL6 */
+#define LCD_D7 7   /* PL7 */
 
 /* INIT */
 void InitPins(void);
