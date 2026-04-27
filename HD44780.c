@@ -44,10 +44,10 @@ void DISP_InitDisplay(void){
 	_delay_us(200);
 	SendNibble(0x02);
 
-	WriteCommand(0x28); // 4-bit, 2 lines
-	WriteCommand(0x0C); // display on, cursor off
-	WriteCommand(0x06); // entry mode increment
-	WriteCommand(0x01); // clear display
+	DISP_WriteCommand(0x28); // 4-bit, 2 lines
+	DISP_WriteCommand(0x0C); // display on, cursor off
+	DISP_WriteCommand(0x06); // entry mode increment
+	DISP_WriteCommand(0x01); // clear display
 	_delay_ms(2);
 }
 
