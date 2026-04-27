@@ -115,8 +115,6 @@ void DISP_PrintChar(uint8_t c) {
 		case '\f': {
 			// form feed -> clear display
 			DISP_ClearDisplay();
-			currentRow = 1;
-			currentCol = 0;
 			break;
 		}
 
@@ -154,6 +152,8 @@ void DISP_PrintStringAt(char *s, uint8_t row, uint8_t col){
 void DISP_ClearDisplay(void){
 	DISP_WriteCommand(0x01);
 	_delay_ms(2);
+	currentRow = 1;
+	currentCol = 0;
 }
 
 void DISP_ShiftRight(void){
