@@ -22,28 +22,28 @@
 #define LCD_D7 7   /* PL7 */
 
 /* INIT */
-void InitPins(void);
-void InitDisplay(void);
+void DISP_InitPins(void);
+void DISP_InitDisplay(void);
 
 /* LOW LEVEL */
-void WriteCommand(uint8_t value);
-void WriteData(uint8_t value);
+void DISP_WriteCommand(uint8_t value);
+void DISP_WriteData(uint8_t value);
 
 /* CURSOR */
-void GoToPosition(uint8_t row, uint8_t col);
+void DISP_GoToPosition(uint8_t row, uint8_t col);
 
 /* TEXT */
-void PrintChar(uint8_t character);
-void PrintString(char *string);
-void PrintStringAt(char *string, uint8_t row, uint8_t col);
+void DISP_PrintChar(uint8_t character);
+void DISP_PrintString(char *string);
+void DISP_PrintStringAt(char *string, uint8_t row, uint8_t col);
 
 /* DISPLAY OPERATIONS */
-void ClearDisplay(void);
-void ShiftLeft(void);
-void ShiftRight(void);
+void DISP_ClearDisplay(void);
+void DISP_ShiftLeft(void);
+void DISP_ShiftRight(void);
 
 /* CUSTOM CHARACTERS */
-void CreateCustomChar(uint8_t *data, uint8_t position);
-void ShowCustomChar(uint8_t position, uint8_t row, uint8_t col);
+void DISP_CreateCustomChar(uint8_t *data, uint8_t position);
+void DISP_ShowCustomChar(uint8_t position, uint8_t row, uint8_t col);
 
 #endif

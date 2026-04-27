@@ -27,14 +27,14 @@ static void SendByte(uint8_t value){
 }
 
 /* Public functions */
-void InitPins(void){
+void DISP_InitPins(void){
 	LCD_DDR |= (1<<LCD_RS)|(1<<LCD_RW)|(1<<LCD_EN)|
 	(1<<LCD_BL)|(1<<LCD_D4)|(1<<LCD_D5)|
 	(1<<LCD_D6)|(1<<LCD_D7);
 	LCD_PORT |= (1<<LCD_BL);  // backlight on
 }
 
-void InitDisplay(void){
+void DISP_InitDisplay(void){
 	_delay_ms(30);
 	SendNibble(0x03);
 	_delay_ms(10);
@@ -51,38 +51,38 @@ void InitDisplay(void){
 	_delay_ms(2);
 }
 
-void WriteCommand(uint8_t value){
+void DISP_WriteCommand(uint8_t value){
 	LCD_PORT &= ~(1<<LCD_RS | 1<<LCD_RW);
 	SendByte(value);
 }
 
-void WriteData(uint8_t value){
+void DISP_WriteData(uint8_t value){
 	LCD_PORT |= (1<<LCD_RS);
 	LCD_PORT &= ~(1<<LCD_RW);
 	SendByte(value);
 }
 
-void GoToPosition(uint8_t row, uint8_t col){
+void DISP_GoToPosition(uint8_t row, uint8_t col){
 	currentCol = col;
 	currentRow = row;
 	uint8_t addr = (row == 1) ? col : 0x40 + col;
-	WriteCommand(0x80 + addr);
+	DISP_WriteCommand(0x80 + addr);
 }
 
-void PrintChar(uint8_t c) {
+void DISP_PrintChar(uint8_t c) {
 	switch(c) {
 		case '\n': {
 			// newline -> move to next line
 			currentRow = (currentRow == 1) ? 2 : 1;
 			currentCol = 0;
-			GoToPosition(currentRow, currentCol);
+			DISP_GoToPosition(currentRow, currentCol);
 			break;
 		}
 
 		case '\r': {
 			// carriage return -> move to start of current line
 			currentCol = 0;
-			GoToPosition(currentRow, currentCol);
+			DISP_GoToPosition(currentRow, currentCol);
 			break;
 		}
 
@@ -90,12 +90,12 @@ void PrintChar(uint8_t c) {
 			// tab -> 4 spaces
 			uint8_t spaces = 4;
 			while(spaces--) {
-				WriteData(' ');
+				DISP_WriteData(' ');
 				currentCol++;
 				if(currentCol >= 16) {
 					currentCol = 0;
 					currentRow = (currentRow == 1) ? 2 : 1;
-					GoToPosition(currentRow, currentCol);
+					DISP_GoToPosition(currentRow, currentCol);
 				}
 			}
 			break;
@@ -105,16 +105,16 @@ void PrintChar(uint8_t c) {
 			// backspace -> move one column back and clear
 			if(currentCol > 0) {
 				currentCol--;
-				GoToPosition(currentRow, currentCol);
-				WriteData(' ');
-				GoToPosition(currentRow, currentCol);
+				DISP_GoToPosition(currentRow, currentCol);
+				DISP_WriteData(' ');
+				DISP_GoToPosition(currentRow, currentCol);
 			}
 			break;
 		}
 
 		case '\f': {
 			// form feed -> clear display
-			ClearDisplay();
+			DISP_ClearDisplay();
 			currentRow = 1;
 			currentCol = 0;
 			break;
@@ -123,56 +123,56 @@ void PrintChar(uint8_t c) {
 		case '\v': {
 			// vertical tab -> move to next row, keep column
 			currentRow = (currentRow == 1) ? 2 : 1;
-			GoToPosition(currentRow, currentCol);
+			DISP_GoToPosition(currentRow, currentCol);
 			break;
 		}
 
 		default: {
 			// normal printable character
-			WriteData(c);
+			DISP_WriteData(c);
 			currentCol++;
 			if(currentCol >= 16) {
 				currentCol = 0;
 				currentRow = (currentRow == 1) ? 2 : 1;
-				GoToPosition(currentRow, currentCol);
+				DISP_GoToPosition(currentRow, currentCol);
 			}
 			break;
 		}
 	}
 }
 
-void PrintString(char *s){
-	while(*s) PrintChar(*s++);
+void DISP_PrintString(char *s){
+	while(*s) DISP_PrintChar(*s++);
 }
 
-void PrintStringAt(char *s, uint8_t row, uint8_t col){
-	GoToPosition(row, col);
-	PrintString(s);
+void DISP_PrintStringAt(char *s, uint8_t row, uint8_t col){
+	DISP_GoToPosition(row, col);
+	DISP_PrintString(s);
 }
 
 /* Simple operations */
-void ClearDisplay(void){
-	WriteCommand(0x01);
+void DISP_ClearDisplay(void){
+	DISP_WriteCommand(0x01);
 	_delay_ms(2);
 }
 
-void ShiftRight(void){
-	WriteCommand(0x1C);
+void DISP_ShiftRight(void){
+	DISP_WriteCommand(0x1C);
 }
 
-void ShiftLeft(void){
-	WriteCommand(0x18);
+void DISP_ShiftLeft(void){
+	DISP_WriteCommand(0x18);
 }
 
 /* Custom characters */
-void CreateCustomChar(uint8_t *data, uint8_t pos){
+void DISP_CreateCustomChar(uint8_t *data, uint8_t pos){
 	if(pos > 7) pos = 7;
-	WriteCommand(0x40 + pos*8);
-	for(uint8_t i=0; i<8; i++) WriteData(data[i]);
+	DISP_WriteCommand(0x40 + pos*8);
+	for(uint8_t i=0; i<8; i++) DISP_WriteData(data[i]);
 }
 
-void ShowCustomChar(uint8_t pos, uint8_t row, uint8_t col){
+void DISP_ShowCustomChar(uint8_t pos, uint8_t row, uint8_t col){
 	if(pos > 7) pos = 0;
-	GoToPosition(row, col);
-	PrintChar(pos);
+	DISP_GoToPosition(row, col);
+	DISP_PrintChar(pos);
 }
