@@ -67,7 +67,7 @@ It simplifies the original library while preserving essential functionality, mak
 
 According to the following schematic:
 
-![Schematic](readme\schematic.png)
+![Schematic](./readme/schematic.png)
 
 > Pins can be redefined in `HD44780.h` if needed.
 
